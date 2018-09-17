@@ -15,6 +15,7 @@ app = Flask(__name__)
 app.config.from_pyfile('./config.py')
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Nadal13#13@localhost/kavmuni_project'
 db = SQLAlchemy(app)
 
 
@@ -62,7 +63,9 @@ def index():
                 )
                 db.session.add(result)
                 db.session.commit()
-            except:
+            except Exception as e:
+                print(e)
+                errors.append(e)
                 errors.append("Unable to add item to database.")
     return render_template('index.html', errors=errors, results=results)
 
